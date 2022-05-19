@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Ulven Test
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,12 +9,29 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Ulven Test</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="dataURL"></ion-input>
+      <ion-button (click)="grabData()">Grab Sentence</ion-button>
+    </ion-item>
+    <div *ngIf="apiCallInvalid">ARER</div>
+    <form [formGroup]="formHandler" (ngSubmit)="doSubmit(formHandler.value)" class="login-form" action="#" method="post">
+      <ion-label><p>or enter sentence below</p> </ion-label>
+
+      <ion-item>
+        <ion-textarea formControlName="textControl" placeholder="Enter more information here..." required autofocus auto-grow="true"></ion-textarea>
+      </ion-item>
+      <div class="submit-container">
+          <ion-button type="submit">Process</ion-button>
+      </div>
+    </form>
+
+  </div>
+  <div>
+    <ion-chip *ngFor="let word of wordList" color="dark">{{word?.word}}<ion-badge color="light">{{word?.occurence}}</ion-badge></ion-chip>
   </div>
 </ion-content>
