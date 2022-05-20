@@ -37,11 +37,12 @@ export class HomePage {
   }
 
   doSubmit(f: any) {
-      this.wcs.countWords(f.textControl).then(result =>  {
-        this.wordList = result;
-        console.log(result);
-      
-      let abc = this.wcs.getWordCounter();
+    this.wcs.countWords(f.textControl).then(result => {
+      if (result) {
+        this.wcs.getWordList(10).then(result => {
+          this.wordList = result;
+        });
+      }
     });
   }
 }

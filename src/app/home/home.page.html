@@ -18,7 +18,7 @@
       <ion-input type="text" [(ngModel)]="dataURL"></ion-input>
       <ion-button (click)="grabData()">Grab Sentence</ion-button>
     </ion-item>
-    <div *ngIf="apiCallInvalid">ARER</div>
+    <div *ngIf="apiCallInvalid">Oops! Invalid API Response, it should contain "description" key</div>
     <form [formGroup]="formHandler" (ngSubmit)="doSubmit(formHandler.value)" class="login-form" action="#" method="post">
       <ion-label><p>or enter sentence below</p> </ion-label>
 

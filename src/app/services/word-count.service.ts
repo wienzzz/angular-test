@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { promise } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -8,30 +9,33 @@ export class WordCountService {
   constructor() { }
 
   countWords(bodyText: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _array = [];
-      bodyText.trim().replace(/  +/g, ' ').toLowerCase().split(" ").filter((v, i, a) => a.indexOf(v) === i).forEach((wd) => {
-        let cleanwd = wd.replace(/\W+$/gi, "");
-        let occ = 0;
-        if (cleanwd.match(RegExp('\\w+'))) {
-          if (bodyText.toLowerCase().match(RegExp('\\b' + cleanwd + '\\b', "gi")) === null) occ = 0;
-          else occ = bodyText.toLowerCase().match(RegExp('\\b' + cleanwd + '\\b', "gi")).length;
-          _array.push({ word: wd, occurence: occ });
-          _array.sort((a, b) => {
-            return b.occurence - a.occurence;
-          });
-        }
-        else {
+      bodyText.trim().replace(/  +/g, ' ').toLowerCase().split(" ").filter((v, i, a) => a.indexOf(v) === i).forEach((word) => {
+        let _cleanword = word.replace(/\W$/gi, "");
+        let _occurence = 0;
+        if (_cleanword.match(RegExp('\\w+'))) {
+          let _check = bodyText.toLowerCase().match(RegExp('(^|\\s)' + _cleanword + '(\\s|[.,]?|$)', "gi"));
+          if (!_check) _occurence = 0;
+          else _occurence = _check.length;
 
+          !_array.some(i => i.name == _cleanword) && _array.push({ word: _cleanword, occurence: _occurence });
         }
-        this.wordCounterContainer = _array.slice(0, 10);
-      })
-      resolve(this.wordCounterContainer);
+      });
+
+      _array.sort((a, b) => {
+        return b.occurence - a.occurence;
+      });
+      this.wordCounterContainer = _array;
+
+      resolve(true);
     });
 
   }
 
-  getWordCounter() {
-    return this.wordCounterContainer;
+  getWordList(_num: number) {
+    return new Promise((resolve) => {
+      return this.wordCounterContainer.slice(0,_num);
+    })
   }
 }
