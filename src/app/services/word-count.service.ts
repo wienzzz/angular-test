@@ -15,7 +15,7 @@ export class WordCountService {
         let _cleanword = word.replace(/\W$/gi, "");
         let _occurence = 0;
         if (_cleanword.match(RegExp('\\w+'))) {
-          let _check = bodyText.toLowerCase().match(RegExp('(^|\\s)' + _cleanword + '(\\s|[.,]?|$)', "gi"));
+          let _check = bodyText.toLowerCase().match(RegExp('(^|\\s)' + _cleanword + '(\\s|[.,]|$)', "gi"));
           if (!_check) _occurence = 0;
           else _occurence = _check.length;
 
@@ -35,7 +35,7 @@ export class WordCountService {
 
   getWordList(_num: number) {
     return new Promise((resolve) => {
-      return this.wordCounterContainer.slice(0,_num);
+      resolve(this.wordCounterContainer.slice(0,_num));
     })
   }
 }

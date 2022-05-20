@@ -18,20 +18,44 @@
       <ion-input type="text" [(ngModel)]="dataURL"></ion-input>
       <ion-button (click)="grabData()">Grab Sentence</ion-button>
     </ion-item>
-    <div *ngIf="apiCallInvalid">Oops! Invalid API Response, it should contain "description" key</div>
-    <form [formGroup]="formHandler" (ngSubmit)="doSubmit(formHandler.value)" class="login-form" action="#" method="post">
-      <ion-label><p>or enter sentence below</p> </ion-label>
+    <div class="alert warning-alert" *ngIf="apiCallInvalid">Oops! Invalid API Response, it should contain "description"
+      key</div>
+    <form [formGroup]="formHandler" (ngSubmit)="doSubmit(formHandler.value)" class="login-form" action="#"
+      method="post">
+      <ion-label>
+        <p  class="text-info" *ngIf="apiCallProgress">wait loading api call....</p>
+        <p  class="text-info" *ngIf="!apiCallProgress">or enter sentence below</p>
+      </ion-label>
 
       <ion-item>
-        <ion-textarea formControlName="textControl" placeholder="Enter more information here..." required autofocus auto-grow="true"></ion-textarea>
+        <ion-textarea formControlName="textControl" placeholder="Enter text here..." required autofocus
+          auto-grow="true" [readonly]="apiCallProgress"></ion-textarea>
+          
       </ion-item>
+      <span>Number of characters : </span>
       <div class="submit-container">
-          <ion-button type="submit">Process</ion-button>
+        <ion-button type="submit" expand="block" [disabled]="!formHandler.valid || apiCallProgress">Get Word Count</ion-button>
       </div>
     </form>
 
   </div>
   <div>
-    <ion-chip *ngFor="let word of wordList" color="dark">{{word?.word}}<ion-badge color="light">{{word?.occurence}}</ion-badge></ion-chip>
+    <ion-item>
+      <ion-label>How many words do you want to show?</ion-label>
+      <ion-select [(ngModel)]="wordCount" (ionChange)="showWordCount()" [disabled]="!wordList" interface="popover">
+        <ion-select-option value="10">10</ion-select-option>
+        <ion-select-option value="20">20</ion-select-option>
+        <ion-select-option value="30">30</ion-select-option>
+        <ion-select-option value="50">50</ion-select-option>
+        <ion-select-option value="100">100</ion-select-option>
+  
+      </ion-select>
+    </ion-item>
+
+  </div>
+  <div>
+    <ion-chip *ngFor="let word of wordList" color="dark">{{word?.word}}<ion-badge color="light">{{word?.occurence}}
+      </ion-badge>
+    </ion-chip>
   </div>
 </ion-content>
