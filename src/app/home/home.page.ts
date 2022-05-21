@@ -23,7 +23,7 @@ export class HomePage {
     this.formHandler = this.formBuilder.group({
       'textControl': [null, Validators.required],
     });
-    this.wordCount="10";
+    this.wordCount = "10";
   }
 
   grabData() {
@@ -49,7 +49,7 @@ export class HomePage {
   }
 
   doSubmit(f: any) {
-    this.wcs.countWords(f.textControl).then(res => {
+    this.wcs.countWords(f.controls.textControl.value).then(res => {
       if (res) {
         this.showWordCount();
       };
@@ -57,8 +57,6 @@ export class HomePage {
   };
 
   showWordCount() {
-    this.wcs.getWordList(this.wordCount).then(result => {
-      this.wordList = result;
-    });
+    this.wordList = this.wcs.getWordList(this.wordCount)
   }
 }

@@ -23,18 +23,19 @@
     <form [formGroup]="formHandler" (ngSubmit)="doSubmit(formHandler.value)" class="login-form" action="#"
       method="post">
       <ion-label>
-        <p  class="text-info" *ngIf="apiCallProgress">wait loading api call....</p>
-        <p  class="text-info" *ngIf="!apiCallProgress">or enter sentence below</p>
+        <p class="text-info" *ngIf="apiCallProgress">wait loading api call....</p>
+        <p class="text-info" *ngIf="!apiCallProgress">or enter sentence below</p>
       </ion-label>
 
       <ion-item>
-        <ion-textarea formControlName="textControl" placeholder="Enter text here..." required autofocus
-          auto-grow="true" [readonly]="apiCallProgress"></ion-textarea>
-          
+        <ion-textarea formControlName="textControl" placeholder="Enter text here..." required autofocus auto-grow="true"
+          [readonly]="apiCallProgress"></ion-textarea>
+
       </ion-item>
       <span>Number of characters : </span>
       <div class="submit-container">
-        <ion-button type="submit" expand="block" [disabled]="!formHandler.valid || apiCallProgress">Get Word Count</ion-button>
+        <ion-button type="submit" expand="block" [disabled]="!formHandler.valid || apiCallProgress">Get Word Count
+        </ion-button>
       </div>
     </form>
 
@@ -48,9 +49,28 @@
         <ion-select-option value="30">30</ion-select-option>
         <ion-select-option value="50">50</ion-select-option>
         <ion-select-option value="100">100</ion-select-option>
-  
+
       </ion-select>
     </ion-item>
+
+  </div>
+  <div>
+    <div class="css-grid-table">
+
+      <div class="css-grid-table-header">
+        <div>No.</div>
+        <div>Word</div>
+        <div>Occurence</div>
+      </div>
+
+      <div  class="css-grid-table-body">
+        <div *ngFor="let word of wordList; let i = index">
+        <div>{{i}}</div>
+        <div>{{ word?.word }}</div>
+        <div>{{ word?.occurence }}</div>
+      </div>
+      </div>
+    </div>
 
   </div>
   <div>
