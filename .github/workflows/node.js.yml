@@ -32,4 +32,4 @@ jobs:
     - name: npm install and npm run build
       run: |
           npm i
-          npm test 
+          ng test --browsers=ChromeHeadless --watch=false --code-coverage
