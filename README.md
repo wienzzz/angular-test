@@ -1,7 +1,7 @@
 # Simple Word Occurence Counter
 ## a word counter web-app based on Angular
 
-![example workflow](https://github.com/wienzzz/angular-test>/actions/workflows/<WORKFLOW_FILE>/badge.svg)
+![example workflow](https://github.com/wienzzz/angular-test/actions/workflows/node.js.yml/badge.svg)
 
 
 This app is made using ionic-angular (simply angular wrapped within ionic framework) and meant to demonstrate :
