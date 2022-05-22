@@ -54,7 +54,7 @@ Dillinger uses Gulp + Webpack for fast developing.
 Make a change in your file and instantaneously see your updates!
 
 ## Contribution Note
-Thanks to [faaezahmd](https://codepen.io/faaezahmd/pen/dJeRex) for responsive tabular display using <ul> and <li> tag
+Thanks to [faaezahmd](https://codepen.io/faaezahmd/pen/dJeRex) for responsive tabular display 
 
 ## License
 This repo is for private demo
