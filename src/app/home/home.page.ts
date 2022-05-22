@@ -9,30 +9,36 @@ import { WordCountService } from '../services/word-count.service';
 })
 export class HomePage {
   formHandler: FormGroup;
-  dataURL: string = "https://random-data-api.com/api/restaurant/random_restaurant";
-  apiCallProgress: boolean = false;
-  apiCallInvalid: boolean = false;
+  dataURL = 'https://random-data-api.com/api/restaurant/random_restaurant';
+  apiCallProgress = false;
+  apiCallInvalid = false;
   wordList: any;
   wordCount: any;
+  numberOfWords: number;
+  wordGroupCount: number[];
+  wordCounterLoading = false;
   constructor(private formBuilder: FormBuilder,
     private api: ApiService,
     private wcs: WordCountService) {
+    this.wordGroupCount = [10];
+    this.numberOfWords=0;
   }
 
   ngOnInit() {
     this.formHandler = this.formBuilder.group({
-      'textControl': [null, Validators.required],
+      textControl: ['', Validators.required],
     });
-    this.wordCount = "10";
+    this.wordCount = 10;
   }
 
   grabData() {
     this.apiCallProgress = true;
     this.apiCallInvalid = false;
-    this.formHandler.controls
+    this.formHandler.value.textControl = '';
+    this.numberOfWords = 0;
     this.api.grabText(this.dataURL).subscribe((result) => {
       if (result.hasOwnProperty('description')) {
-        this.formHandler.patchValue({ 'textControl': result.description })
+        this.formHandler.patchValue({ textControl: result.description });
         this.apiCallInvalid = false;
         this.apiCallProgress = false;
 
@@ -49,14 +55,26 @@ export class HomePage {
   }
 
   doSubmit(f: any) {
-    this.wcs.countWords(f.controls.textControl.value).then(res => {
+    this.wcs.countWords(f.textControl).then(res => {
       if (res) {
-        this.showWordCount();
+        this.showWordCount(true);
       };
     });
   };
 
-  showWordCount() {
-    this.wordList = this.wcs.getWordList(this.wordCount)
+  showWordCount(bool: boolean) {
+    this.wordCounterLoading = true;
+    setTimeout(() => {
+      this.wordList = this.wcs.getWordList(this.wordCount);
+      this.numberOfWords = this.wcs.getTotalWordLength();
+      let step = ~~(this.numberOfWords/10);
+      this.wordGroupCount = Array.from({ length: step }, (_, i) => (i+1)*10);
+      if (this.numberOfWords % 10 !== 0) {
+        this.wordGroupCount.push(this.numberOfWords);
+      }
+      if (bool) this.wordCount = this.wordGroupCount[0];
+      this.wordCounterLoading = false;
+    }, 500);
+
   }
 }

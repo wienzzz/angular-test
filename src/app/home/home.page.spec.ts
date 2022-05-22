@@ -1,6 +1,6 @@
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { hasUncaughtExceptionCaptureCallback } from 'process';
@@ -41,12 +41,12 @@ describe('HomePage', () => {
   describe('Function grabData', () => {
     it('expect grabData to call api and return observable and observable have property of Description ', () => {
       fixture.detectChanges();
-      component.dataURL = "https://random-data-api.com/api/restaurant/random_restaurant";
+      component.dataURL = 'https://random-data-api.com/api/restaurant/random_restaurant';
       const response: any = { description: 'testing testing, testing.' };
-      const _apiSpy = spyOn(apiService, 'grabText').withArgs(component.dataURL).and.callThrough();
+      const apiSpy = spyOn(apiService, 'grabText').withArgs(component.dataURL).and.callThrough();
       component.grabData();
       fixture.detectChanges();
-      expect(_apiSpy).toHaveBeenCalledTimes(1);
+      expect(apiSpy).toHaveBeenCalledTimes(1);
 
       expect(component.apiCallProgress).toBeTrue;
       fixture.whenStable().then(() => {
@@ -62,20 +62,19 @@ describe('HomePage', () => {
     it('expect form value to be submitted and call wordCount function once', () => {
       component.wordCount = 10;
       fixture.detectChanges();
-      let mockForm: FormGroup = new FormGroup({ textControl: new FormControl('test') });
-      let mockReturn = [{ word: 'a', occurence: 1 }, { word: 'b', occurence: 2 }];
+      const mockForm: FormGroup = new FormGroup({ textControl: new FormControl('test') });
+      const mockReturn = [{ word: 'a', occurence: 1 }, { word: 'b', occurence: 2 }];
 
       mockForm.patchValue({ textControl: 'testing' });
-      spyOn(component, 'doSubmit').withArgs(mockForm).and.callThrough();
-      console.log(mockForm.controls.textControl.value);
-      const spyCountWords =  spyOn(wordCountService, 'countWords').withArgs(mockForm.controls.textControl.value).and.returnValue(Promise.resolve(true));
+      spyOn(component, 'doSubmit').withArgs(mockForm.value).and.callThrough();
+      const spyCountWords = spyOn(wordCountService, 'countWords').withArgs(mockForm.controls.textControl.value).and.returnValue(Promise.resolve(true));
       spyOn(wordCountService, 'getWordList').withArgs(component.wordCount).and.returnValue(mockReturn);
 
-      component.doSubmit(mockForm);
-      wordCountService.countWords(mockForm.controls.textControl.value).then((value) => {
-        const spyShowWordCount = spyOn(component, 'showWordCount').and.callThrough();
+      component.doSubmit(mockForm.value);
+      wordCountService.countWords(mockForm.value.textControl).then((value) => {
+        const spyShowWordCount = spyOn(component, 'showWordCount').withArgs(true).and.callThrough();
 
-        component.showWordCount();
+        component.showWordCount(true);
 
         expect(spyShowWordCount).toHaveBeenCalledTimes(1);
 
@@ -86,12 +85,18 @@ describe('HomePage', () => {
   });
 
   describe('Function showWordCount()', () => {
-    it('expect to copy array from word count service to wordList', () => {
+    it('expect to copy array from word count service to wordList', fakeAsync(() => {
       let mockReturn = [{ word: 'a', occurence: 1 }, { word: 'b', occurence: 2 }];
+
       spyOn(wordCountService, 'getWordList').withArgs(component.wordCount).and.returnValue(mockReturn);
-      component.showWordCount();
-      expect(component.wordList.length).toBeGreaterThan(0);
+      spyOn(wordCountService, 'getTotalWordLength').and.callThrough().and.returnValue(mockReturn.length);
+      component.showWordCount(false);
+      tick(500);
       expect(component.wordList).toEqual(mockReturn);
-    });
+      expect(component.wordList.length).toBeGreaterThan(0);
+      expect(component.numberOfWords).toEqual(mockReturn.length);
+      discardPeriodicTasks();
+
+    }));
   });
 });

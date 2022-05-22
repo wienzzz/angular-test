@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
       Ulven Test
     </ion-title>
@@ -28,11 +28,13 @@
       </ion-label>
 
       <ion-item>
-        <ion-textarea formControlName="textControl" placeholder="Enter text here..." required autofocus auto-grow="true"
+        <ion-textarea formControlName="textControl" placeholder="Enter text here..." required autofocus  rows="8"
           [readonly]="apiCallProgress"></ion-textarea>
 
       </ion-item>
-      <span>Number of characters : </span>
+      <p class="text-counter">Number of characters : {{ formHandler.value.textControl.length }}</p>
+      <p class="text-counter" *ngIf="!formHandler.valid">Text area should not empty</p>
+
       <div class="submit-container">
         <ion-button type="submit" expand="block" [disabled]="!formHandler.valid || apiCallProgress">Get Word Count
         </ion-button>
@@ -40,42 +42,62 @@
     </form>
 
   </div>
+  <div *ngIf="numberOfWords === 0" class="alert simple-alert">
+    Please enter sentence or grab sentence then click on GET WORD COUNT to show data
+    </div>
+  <div *ngIf="numberOfWords > 0">
   <div>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2"><ion-item><ion-label>Show </ion-label></ion-item></ion-col>
+        <ion-col size="4"><ion-item><ion-select [(ngModel)]="wordCount" (ionChange)="showWordCount(false)" [disabled]="!wordList" interface="popover">
+          <ion-select-option *ngFor="let g of wordGroupCount" [value]="g">{{g}}</ion-select-option>
+  
+        </ion-select></ion-item></ion-col>
+        <ion-col size="6"><ion-item><ion-label>words from total of {{numberOfWords}} word(s)</ion-label></ion-item></ion-col>
+      </ion-row>
+    </ion-grid>
     <ion-item>
-      <ion-label>How many words do you want to show?</ion-label>
-      <ion-select [(ngModel)]="wordCount" (ionChange)="showWordCount()" [disabled]="!wordList" interface="popover">
-        <ion-select-option value="10">10</ion-select-option>
-        <ion-select-option value="20">20</ion-select-option>
-        <ion-select-option value="30">30</ion-select-option>
-        <ion-select-option value="50">50</ion-select-option>
-        <ion-select-option value="100">100</ion-select-option>
-
-      </ion-select>
+      
+      
+      
     </ion-item>
 
   </div>
-  <div>
-    <div class="css-grid-table">
+<div class="counter-loading" *ngIf="wordCounterLoading">
+  
+  <ul class="responsive-table">
+    <li class="table-header">
+      <div class="col col-1"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+      <div class="col col-2"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+      <div class="col col-3"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1" data-label="#Rank"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+      <div class="col col-2" data-label="#Word"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+      <div class="col col-3" data-label="#Occurence"><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></div>
+    </li>
+  </ul>
+</div>
 
-      <div class="css-grid-table-header">
-        <div>No.</div>
-        <div>Word</div>
-        <div>Occurence</div>
-      </div>
-
-      <div  class="css-grid-table-body">
-        <div *ngFor="let word of wordList; let i = index">
-        <div>{{i}}</div>
-        <div>{{ word?.word }}</div>
-        <div>{{ word?.occurence }}</div>
-      </div>
-      </div>
-    </div>
-
+  <div *ngIf="!wordCounterLoading">
+    <ul class="responsive-table">
+      <li class="table-header">
+        <div class="col col-1">#Rank</div>
+        <div class="col col-2">Word</div>
+        <div class="col col-3">Occurence</div>
+      </li>
+      <li class="table-row" *ngFor="let word of wordList; let i = index">
+        <div class="col col-1" data-label="#Rank">{{i+1}}</div>
+        <div class="col col-2" data-label="#Word">{{word?.word}}</div>
+        <div class="col col-3" data-label="#Occurence">{{word?.occurence}}</div>
+      </li>
+    </ul>
   </div>
-  <div>
+  <div *ngIf="false">
     <ion-chip *ngFor="let word of wordList" color="dark">{{word?.word}}<ion-badge color="light">{{word?.occurence}}
       </ion-badge>
     </ion-chip>
   </div>
+</div>
 </ion-content>

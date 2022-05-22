@@ -33,6 +33,6 @@ describe('WordCountService', () => {
 
   it('function getWordList should return error when number less than or equal to 0', () => {
     const numberOfWords = -1;
-    expect(service.getWordList(numberOfWords)).toBeFalsy();
+    expect(service.getWordList(numberOfWords)).toEqual([]);
   });
 });
