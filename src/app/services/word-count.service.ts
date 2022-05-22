@@ -34,7 +34,6 @@ export class WordCountService {
 
       resolve(true);
     });
-
   }
 
   getWordList(_num: number) {
