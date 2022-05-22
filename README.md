@@ -38,7 +38,6 @@ ng serve
 
 or simply visit this hosted link below
 [Ulven Angular Test](https://ulven-word-occurence.herokuapp.com/)
-> Will host in Heroku later, apparently they have trouble with Github automation as for now
 > Note that this app was made using ionic-angular framework
 
 ## Caveat
