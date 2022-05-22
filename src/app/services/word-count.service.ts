@@ -16,10 +16,11 @@ export class WordCountService {
 
       let _array = [];
       bodyText.trim().replace(/  +/g, ' ').toLowerCase().split(" ").filter((v, i, a) => a.indexOf(v) === i).forEach((word) => {
-        let _cleanword = word.replace(/\W+$/gi, "");
+        let _cleanword = word.replace(/[.,]+$/gi, "");
+        console.log(_cleanword);
         let _occurence = 0;
         if (_cleanword.match(RegExp('\\w+'))) {
-          let _check = bodyText.toLowerCase().match(RegExp(`(^|\\s+|)${_cleanword}(\\s|[.,]+|\$)`, "gi"));
+          let _check = bodyText.toLowerCase().match(RegExp(`(^|\\s+|)${_cleanword}(\\s|[.,]]+|\$)`, "gi"));
           if (!_check) _occurence = 0;
           else _occurence = _check.length;
 
@@ -27,6 +28,7 @@ export class WordCountService {
         }
       });
 
+      console.log(_array);
       _array.sort((a, b) => {
         return b.occurence - a.occurence;
       });
