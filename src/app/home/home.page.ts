@@ -34,7 +34,7 @@ export class HomePage {
   grabData() {
     this.apiCallProgress = true;
     this.apiCallInvalid = false;
-    this.formHandler.value.textControl = '';
+    this.formHandler.patchValue({ textControl: ''});
     this.numberOfWords = 0;
     this.api.grabText(this.dataURL).subscribe((result) => {
       if (result.hasOwnProperty('description')) {
