@@ -36,9 +36,8 @@ or
 ng serve
 ```
 
-~~or simply visit this hosted link below
-[Ulven Angular Test]~~
-> Will host in Heroku later, apparently they have trouble with Github automation as for now
+or simply visit this hosted link below
+[Ulven Angular Test](https://ulven-word-occurence.herokuapp.com/)
 > Note that this app was made using ionic-angular framework
 
 ## Caveat
