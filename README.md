@@ -50,8 +50,6 @@ The term "word" could have various interpretation. For Sake of simplicity, I int
 Want to go further? Great!
 Just fork this repo or put an issue/request/enhancement and I will try to get back to you as soon as possible :)
 
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
 
 ## Contribution Note
 Thanks to [faaezahmd](https://codepen.io/faaezahmd/pen/dJeRex) for responsive tabular display 
